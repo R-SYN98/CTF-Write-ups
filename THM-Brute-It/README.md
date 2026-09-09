@@ -55,7 +55,7 @@ This is a login page for an administrator. Now that we have are at this page we 
 
 # Getting a Shell
 
-our next step to is get a shell onto the webserver, we can start by trying to brute force the password for the admin user. Before we use our brute forcing tool we need to gather some information
+Our next step to is get a shell onto the webserver, we can start by trying to brute force the password for the admin user. Before we use our brute forcing tool we need to gather some information.
 
 <ul>
   <li>What is the error message when we try to log in?</li>
@@ -69,7 +69,7 @@ We can easily see if the system locks us out by spamming failed attempts. After 
 
 " Username or password is invalid "
 
-now we can use the inspector section in the Devtools of the browser with F12
+now we can use the inspector section in the Devtools of the browser with F12.
 
 ![logininfo](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Logininfo.png)
 
@@ -92,29 +92,29 @@ again breaking this command down
   <li>F=Username or password invalid' is telling hydra the error message to look out for so it knows that the attempt didn't work.</li>
 </ul>
 
-[!hydra](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Hydra.png)
+![hydra](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Hydra.png)
 
 Hydra has gathered that the password for the admin account is xavier, with this we attempt to log into the /admin section with these credentials and are greeted with this screen.
 
-[!rsalogin](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/rsalogin.png)
+![rsalogin](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/rsalogin.png)
 
 We get our first flag and then we can see there's a link embeded into the text that leads us to an RSA key for the user John.
 
-[!rsa](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/RSA.png)
+![rsa](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/RSA.png)
 
 we can now use the curl command to download this RSA key to our machine and then we can start prepping it to be cracked.
 
-[!curl](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/curl.png)
+![curl](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/curl.png)
 
 Firstly we need to get this file ready to be read by John before we can crack it, then once we've prepped it we can use John to crack the password as seen below.
 
-[!john](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/john.png)
+![john](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/john.png)
 
-Now we can see that John's password is rockinroll. And since we have this RSA key we can now connect to the machine via SSH.
+Now we can see that John's RSA private key password is rockinroll. Now we can now connect to the machine via SSH.
 
-Before we SSH we use the CHMOD command with 600 on the file to make sure that file can be read during the connection, then we can use the SSH command with the -i flag to include the RSA key and use John's username with his password to connect to the webserver machine.
+Before we SSH we use the CHMOD command with 600 on the file to make sure that file can be read during the connection, then we can use the SSH command with the -i flag to include the RSA key and use John's username with his RSA password to connect to the webserver machine.
 
-[!ssh](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/ssh.png)
+![ssh](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/ssh.png)
 
 we can use ls to find the user.txt file requested by THM and then cat it to get the next flag.
 
