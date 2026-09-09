@@ -28,3 +28,24 @@ Now as you can see by the image we gleaned a fair bit of information about the t
 
 Now that we know that there's a web server running on port 80 we can try having a look at the website on a browser
 
+remember to put http at the beginning of the url because the search bar will default to port 443 "https"
+
+![website](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Website.png)
+
+Nothing really of note here but we know for sure that there is a website here, now we can move onto using Gobuster to enumerate any domains that may be present on this website.
+
+"Gobuster dir -u http://10.130.145.4 -w /usr/share/wordlists/dirb/common.txt "
+
+to explain this command again
+<ul>
+  <li> dir makes gobuster work in directory mode </li>
+  <li> -u is the flag that denotes the target, in this case we use the url of the website</li>
+  <li> -w is the wordlist, this is what gobuster will reference to when checking the domains, its like a checklist for gobuster, we used the common.txt that comes default on kali as we don't need any bigger ones than this one</li>
+</ul>
+
+![gobuster](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/gobuster.png)
+
+One thing we can ignore for the time being is both the 403 error results and the index.html domain. Reason being is that index.html is generally the default homepage of a website and will just lead back to the initial image of the website above, and 403 is a Forbidden error, meaning we don't have the permissions to view these. 
+
+With this we have some section to look at, /admin.
+
