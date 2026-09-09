@@ -49,3 +49,47 @@ One thing we can ignore for the time being is both the 403 error results and the
 
 With this we have some section to look at, /admin.
 
+![admin](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/admin.png) 
+
+This is a login page for an administrator. Now that we have are at this page we can move onto our second section of the CTF.
+
+# Getting a Shell
+
+our next step to is get a shell onto the webserver, we can start by trying to brute force the password for the admin user. Before we use our brute forcing tool we need to gather some information
+
+<ul>
+  <li>What is the error message when we try to log in?</li>
+  <li>Does the system lock us out after too many failed attempts?</li>
+  <li>What is the name of the input section for the password and username sections in the HTML?</li>
+</ul>
+
+We can easily see if the system locks us out by spamming failed attempts. After I tried this I didn't get timed out and I was presented with this error message.
+
+![error](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Failed.png)
+
+" Username or password is invalid "
+
+now we can use the inspector section in the Devtools of the browser with F12
+
+![logininfo](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Logininfo.png)
+
+We can see that the website reads the username input as "user" and the password section as "pass".
+
+With this we can now brute force the admin's password with Hydra using this following command.
+
+"hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.130.145.4 -s 80 http-post-form '/admin/:user=^USER^&pass=^PASS^:F=Username or password invalid'"
+
+again breaking this command down 
+
+<ul>
+  <li>-l is the username to be used, if you wanted to brute force a username you could put a path to a wordlist to use too </li>
+  <li> -P is the password that's going to be used, here we used the rockyou.txt wordlist</li>
+  <li> 10.130.145.4 is the link to the website </li>
+  <li> -s is us telling hydra which port to use, 80 is http</li>
+  <li> http-post-form is the section telling us what method hydra should use to send over the requests to the service, with this we're telling hydra to use post requests</li>
+  <li> '/admin/ is telling hydra which path to use on the website, this ensures the requests are sent to /admin</li>
+  <li> :user=^USER^&pass=^PASS^: this section tells hydra where it should put the values of the username and password flags, we change the user and pass sections depending on the target, but because the website's html has username and password input names as user and pass then we use these names here.</li>
+  <li>F=Username or password invalid' is telling hydra the error message to look out for so it knows that the attempt didn't work.</li>
+</ul>
+
+[!hydra](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Hydra.png)
