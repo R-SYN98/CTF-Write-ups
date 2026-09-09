@@ -93,3 +93,75 @@ again breaking this command down
 </ul>
 
 [!hydra](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/Hydra.png)
+
+Hydra has gathered that the password for the admin account is xavier, with this we attempt to log into the /admin section with these credentials and are greeted with this screen.
+
+[!rsalogin](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/rsalogin.png)
+
+We get our first flag and then we can see there's a link embeded into the text that leads us to an RSA key for the user John.
+
+[!rsa](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/RSA.png)
+
+we can now use the curl command to download this RSA key to our machine and then we can start prepping it to be cracked.
+
+[!curl](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/curl.png)
+
+Firstly we need to get this file ready to be read by John before we can crack it, then once we've prepped it we can use John to crack the password as seen below.
+
+[!john](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/john.png)
+
+Now we can see that John's password is rockinroll. And since we have this RSA key we can now connect to the machine via SSH.
+
+Before we SSH we use the CHMOD command with 600 on the file to make sure that file can be read during the connection, then we can use the SSH command with the -i flag to include the RSA key and use John's username with his password to connect to the webserver machine.
+
+[!ssh](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/ssh.png)
+
+we can use ls to find the user.txt file requested by THM and then cat it to get the next flag.
+
+# Privilege Escalation
+
+Now our job is to escalate our privilege to gain access to the root folder. We first can see what commands that John has access to by using the "Sudo -l" command.
+
+![sudo](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/cat.png)
+
+we can see that John has access to run the Cat command with Sudo without needing the root password. Knowing this information we can use Sudo Cat /etc/shadow to get a print out of password hashes of the users, we can also pipe the grep command with the word root to try and only bring up the root's password hash.
+
+![cat](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/actualcat)
+
+We can then copy the hash and bring it back to our machine to get it cracked by john, I like to use the nano command to make a .txt file with the hash and then run it through john.
+
+![adminjohn](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/rootpass.png)
+
+We can see that john has cracked the hash and the root password is football. Hopping back to the shell we can use the su command and then try the password provided to switch to the root user of the machine.
+
+![su](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-Brute-It/images/su.png)
+
+Now we have escalated our privilege we can have a snoop around for root.txt and get the final flag. With that the CTF is complete.
+
+# Answers
+
+Reconnaissance
+<ul>
+  <li>How many ports are open? = 2</li>
+  <li>What Version of SSH is running? = OpenSSH 7.6p1</li>
+  <li>What version of Apache is running? = 2.4.29</li>
+  <li>Which Linux Distribution is running? = Ubuntu</li>
+  <li>What is the hidden directory? = /admin</li>
+</ul>
+
+Getting a shell
+<ul>
+  <li>What is the user:password of the admin panel? = admin:xavier</li>
+  <li>What is John's RSA Private Key passphrase? = rockinroll</li>
+  <li>user.txt = THM{a_password_is_not_a_barrier}</li>
+  <li>Web flag = THM{brut3_f0rce_is_e4sy}</li>
+</ul>
+
+Privilege Escalation
+<ul>
+  <li> What is the root's password? = football</li>
+  <li>root.txt = THM{pr1v1l3g3_3sc4l4t10n}</li>
+</ul>
+
+
+Thank you for reading my write up :)
