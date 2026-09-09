@@ -10,3 +10,4 @@ Our first objective is to do some recon and figure out information on the vulner
 
 " Nmap 10.130.145.4 -sV -p- " 
 
+![nmap](https://github.com/R-SYN98/CTF-Write-ups/THM-Brute-It/images/Screenshot_2026-09-09-093802.png)
