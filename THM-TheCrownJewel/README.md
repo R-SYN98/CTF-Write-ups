@@ -1,4 +1,4 @@
-#THM THECROWNJEWEL
+# THM THECROWNJEWEL
 
 
 <a href="https://tryhackme.com/room/thecrownjewel" Link to room> <a/>
@@ -28,4 +28,4 @@ breaking this down.
   <li> whoami = the whoami command shows which user account is executing the commands, used in both windows and linux</li>
 </ul>
 
-![naughtyip](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-TheCrownJewel/images/sussyip)
+![naughtyip](https://github.com/R-SYN98/CTF-Write-ups/blob/main/THM-TheCrownJewel/images/sussyip.png)
